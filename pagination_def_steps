@@ -1,0 +1,24 @@
+
+
+
+Step 1: 
+
+from rest_framework.pagination import PageNumberPagination
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+
+
+Step 2:
+
+obj = Model.objects.filter(key=value).order_by('value')
+paginator = StandardResultsSetPagination()
+result_page = paginator.paginate_queryset(obj, request)
+
+Step 3:
+
+serializer = RequiredSerializers(result_page, many=True, context={'request':request})
+response_dict['data'].update({'any_name':serializer.data})
+return paginator.get_paginated_response(response_dict)
